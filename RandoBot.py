@@ -99,6 +99,12 @@ async def archive_cmd(ctx):
 
     await ctx.message.channel.edit(category=category)
 
+    participants = [x for x in ctx.guild.members if role_next_rando in [role.name for role in x.roles]]
+
+    for participant in participants:
+        role = discord.utils.get(participant.guild.roles, name=role_next_rando)
+        await participant.remove_roles(role)
+
 @client.command(
     name="participant",
     aliases=["participants", "randonneurs", "randonneur"],
