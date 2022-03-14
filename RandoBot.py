@@ -115,7 +115,10 @@ async def participant_cmd(ctx):
 
     embed = discord.Embed(color=0x14F5F5)
     embed.title = "Liste des participants"
-    embed.description = "- " + "\n- ".join([member.name for member in participants])
+    if participants:
+        embed.description = "- " + "\n- ".join([member.name for member in participants])
+    else:
+        embed.description = "Aucun participants"
     embed.set_footer(text="By RandoBot")
     await ctx.send(embed=embed)
 
@@ -125,13 +128,16 @@ async def participant_cmd(ctx):
 )
 async def template(ctx):
     await ctx.send("""
-@.everyone Rando de la semaine
+@.everyone Rando de la semaine!
 - Date : {date}
 - Lieu : {lieu}
-- RDV : {hour} sur place
-- Parking : https://goo.gl/maps/{parking}
-- Manger : Préparer un repas / sandwich
+- RDV : {heure} sur place
+- Parking : https://goo.gl/maps/ {parking}
+- Repas : Préparer un repas à emporter / sandwich
 - Covoiturage : {covoiturage} ({x} places libres)
+- Difficulté prévue : {difficulté}
+
+Merci de réagir aux réactions ci-dessous, même si vous ne participez pas.
                    """)
 
 client.run(os.environ.get("TOKEN"))
