@@ -56,8 +56,8 @@ async def on_message(message):
                 return await message.channel.send("Merci de préciser une date au format jj/mm/aaaa")
 
             overwrites = {
-                message.guild.default_role: discord.PermissionOverwrite(view_channel=False, send_messages=False),
-                message.author: discord.PermissionOverwrite(view_channel=True, send_messages=True),
+                message.guild.default_role: discord.PermissionOverwrite(view_channel=True, send_messages=False),
+                message.author: discord.PermissionOverwrite(view_channel=True, send_messages=True, mention_everyone=True),
                 discord.utils.get(message.author.guild.roles, name=role_next_rando): discord.PermissionOverwrite(view_channel=True, send_messages=True),
             }
 
