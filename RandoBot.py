@@ -85,6 +85,8 @@ async def on_raw_reaction_remove(ctx):
     pass_context=True,
 )
 async def archive_cmd(ctx):
+    await ctx.message.delete()
+
     date = ctx.message.channel.name.split("-", 1)[1]
     os.makedirs("images" + os.sep + date, exist_ok=True)
 
@@ -111,6 +113,8 @@ async def archive_cmd(ctx):
     pass_context=True,
 )
 async def participant_cmd(ctx):
+    await ctx.message.delete()
+
     participants = [x for x in ctx.guild.members if role_next_rando in [role.name for role in x.roles]]
 
     embed = discord.Embed(color=0x14F5F5)
@@ -126,7 +130,9 @@ async def participant_cmd(ctx):
     name="template",
     pass_context=True,
 )
-async def template(ctx):
+async def template_cmd(ctx):
+    await ctx.message.delete()
+
     await ctx.send("""
 @.everyone Rando de la semaine!
 - Date : {date}
