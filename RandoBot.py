@@ -40,6 +40,9 @@ async def on_ready():
 async def on_message(message):
     if message.channel.id == channel_announcements:
         if "date" in message.content.lower():
+            if message.author.bot:
+                return
+
             await message.add_reaction(emo("Check"))
             await message.add_reaction(emo("Average"))
             await message.add_reaction(emo("Cross"))
