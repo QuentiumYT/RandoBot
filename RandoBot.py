@@ -1,5 +1,6 @@
 import discord, os, dotenv, json, re
 from discord.ext import commands
+from datetime import date, timedelta
 
 __author__ = "QuentiumYT"
 
@@ -38,8 +39,8 @@ async def on_ready():
 
 @client.listen()
 async def on_message(message):
-    if message.channel.id == config["channel_announcements"]:
-        if "date" in message.content.lower():
+    if message.channel.id == config["channel_announcements"] and "everyone" in message.content:
+        if "date" in message.content.lower() or "heure" in message.content.lower():
             if message.author.bot:
                 return
 
@@ -52,11 +53,22 @@ async def on_message(message):
             category = discord.utils.get(message.guild.categories, name=config["category_default"])
 
             if planned_date:
-                date = "-".join(planned_date[0])
+                # Specified date
+                date_obj = date(int(planned_date[0][2]), int(planned_date[0][1]), int(planned_date[0][0]))
+            elif "demain" in message.content.lower():
+                # Tommorrow date
+                date_obj = date.today() + timedelta(days=1)
+            elif "samedi" in message.content.lower():
+                # Upcoming saturday date
+                delta = timedelta(days=5 - date.today().weekday())
+                date_obj = date.today() + delta if delta.days > 1 else date.today() + delta + timedelta(days=7)
+            elif "dimanche" in message.content.lower():
+                # Upcoming sunday date
+                delta = timedelta(days=6 - date.today().weekday())
+                date_obj = date.today() + delta if delta.days > 1 else date.today() + delta + timedelta(days=7)
+            date_repr = date_obj.strftime("%d-%m-%Y")
 
-                channel = await message.guild.create_text_channel("rando-" + date, category=category)
-            else:
-                return await message.channel.send("Merci de préciser une date au format jj/mm/aaaa")
+            channel = await message.guild.create_text_channel("rando-" + date_repr, category=category)
 
             overwrites = {
                 message.guild.default_role: discord.PermissionOverwrite(view_channel=True, send_messages=False),
@@ -66,6 +78,9 @@ async def on_message(message):
 
             for target, overwrite in overwrites.items():
                 await channel.set_permissions(target, overwrite=overwrite)
+        else:
+            await message.channel.send("Merci de préciser une date si vous organisez une rando! (jj/mm/aaaa | demain)", delete_after=15)
+            await message.delete()
 
 @client.event
 async def on_raw_reaction_add(ctx):
