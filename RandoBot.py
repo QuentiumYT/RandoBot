@@ -1,10 +1,10 @@
-import discord, os, dotenv, re
+import discord, os, dotenv, json, re
 from discord.ext import commands
 
-channel_announcements = 950693643688230922
-role_next_rando = "Prochaine Rando"
-category_default = "Discussion"
-category_archived = "Rando archivées"
+__author__ = "QuentiumYT"
+
+with open("config.json", "r", encoding="utf-8", errors="ignore") as file:
+    config = json.loads(file.read(), strict=False)
 
 dotenv.load_dotenv()
 
@@ -38,7 +38,7 @@ async def on_ready():
 
 @client.listen()
 async def on_message(message):
-    if message.channel.id == channel_announcements:
+    if message.channel.id == config["channel_announcements"]:
         if "date" in message.content.lower():
             if message.author.bot:
                 return
@@ -49,7 +49,7 @@ async def on_message(message):
 
             planned_date = re.findall(r"(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](20\d{2})", message.content)
 
-            category = discord.utils.get(message.guild.categories, name=category_default)
+            category = discord.utils.get(message.guild.categories, name=config["category_default"])
 
             if planned_date:
                 date = "-".join(planned_date[0])
@@ -61,7 +61,7 @@ async def on_message(message):
             overwrites = {
                 message.guild.default_role: discord.PermissionOverwrite(view_channel=True, send_messages=False),
                 message.author: discord.PermissionOverwrite(view_channel=True, send_messages=True, mention_everyone=True),
-                discord.utils.get(message.author.guild.roles, name=role_next_rando): discord.PermissionOverwrite(view_channel=True, send_messages=True),
+                discord.utils.get(message.author.guild.roles, name=config["role_next_rando"]): discord.PermissionOverwrite(view_channel=True, send_messages=True),
             }
 
             for target, overwrite in overwrites.items():
@@ -71,7 +71,7 @@ async def on_message(message):
 async def on_raw_reaction_add(ctx):
     if not ctx.member.bot:
         if any(ctx.emoji.name == x for x in ["Check", "Average"]):
-            role = discord.utils.get(ctx.member.guild.roles, name=role_next_rando)
+            role = discord.utils.get(ctx.member.guild.roles, name=config["role_next_rando"])
             await ctx.member.add_roles(role)
 
 @client.event
@@ -80,7 +80,7 @@ async def on_raw_reaction_remove(ctx):
     user = discord.utils.get(guild.members, id=ctx.user_id)
     if not user.bot:
         if any(ctx.emoji.name == x for x in ["Check", "Average", "Cross"]):
-            role = discord.utils.get(guild.roles, name=role_next_rando)
+            role = discord.utils.get(guild.roles, name=config["role_next_rando"])
             await user.remove_roles(role)
 
 @client.command(
@@ -98,16 +98,16 @@ async def archive_cmd(ctx):
             for attachment in log.attachments:
                 await attachment.save("images" + os.sep + date + os.sep + attachment.filename)
 
-    category = discord.utils.get(ctx.guild.categories, name=category_archived)
+    category = discord.utils.get(ctx.guild.categories, name=config["category_archived"])
     if not category:
-        category = await ctx.guild.create_category_channel(category_archived)
+        category = await ctx.guild.create_category_channel(config["category_archived"])
 
     await ctx.message.channel.edit(category=category)
 
-    participants = [x for x in ctx.guild.members if role_next_rando in [role.name for role in x.roles]]
+    participants = [x for x in ctx.guild.members if config["role_next_rando"] in [role.name for role in x.roles]]
 
     for participant in participants:
-        role = discord.utils.get(participant.guild.roles, name=role_next_rando)
+        role = discord.utils.get(participant.guild.roles, name=config["role_next_rando"])
         await participant.remove_roles(role)
 
 @client.command(
@@ -118,7 +118,7 @@ async def archive_cmd(ctx):
 async def participant_cmd(ctx):
     await ctx.message.delete()
 
-    participants = [x for x in ctx.guild.members if role_next_rando in [role.name for role in x.roles]]
+    participants = [x for x in ctx.guild.members if config["role_next_rando"] in [role.name for role in x.roles]]
 
     embed = discord.Embed(color=0x14F5F5)
     embed.title = "Liste des participants"
