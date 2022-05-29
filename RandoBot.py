@@ -88,7 +88,10 @@ async def on_raw_reaction_add(ctx):
     if not ctx.member.bot:
         if any(ctx.emoji.name == x for x in ["Check", "Average"]):
             role = discord.utils.get(ctx.member.guild.roles, name=config["role_next_rando"])
-            await ctx.member.add_roles(role)
+            try:
+                await ctx.member.add_roles(role)
+            except discord.errors.Forbidden:
+                pass
 
 @client.event
 async def on_raw_reaction_remove(ctx):
@@ -97,7 +100,10 @@ async def on_raw_reaction_remove(ctx):
     if not user.bot:
         if any(ctx.emoji.name == x for x in ["Check", "Average", "Cross"]):
             role = discord.utils.get(guild.roles, name=config["role_next_rando"])
-            await user.remove_roles(role)
+            try:
+                await user.remove_roles(role)
+            except discord.errors.Forbidden:
+                pass
 
 @client.command(
     name="archive",
