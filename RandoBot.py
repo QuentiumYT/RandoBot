@@ -38,8 +38,9 @@ async def on_ready():
     )
 
 @client.listen()
-async def on_message(message):
-    if message.channel.id == config["channel_announcements"] and "everyone" in message.content:
+async def on_message(message: discord.Message):
+    # Correct channel and mention everyone or role
+    if message.channel.id == config["channel_announcements"] and (message.mention_everyone or message.role_mentions):
         if "date" in message.content.lower() or "heure" in message.content.lower():
             if message.author.bot:
                 return
@@ -56,7 +57,7 @@ async def on_message(message):
                 # Specified date
                 date_obj = date(int(planned_date[0][2]), int(planned_date[0][1]), int(planned_date[0][0]))
             elif "demain" in message.content.lower():
-                # Tommorrow date
+                # Tomorrow date
                 date_obj = date.today() + timedelta(days=1)
             elif "samedi" in message.content.lower():
                 # Upcoming saturday date
@@ -162,6 +163,6 @@ async def template_cmd(ctx):
 - Difficulté prévue : {difficulté}
 
 Merci de réagir aux réactions ci-dessous, même si vous ne participez pas.
-                   """)
+""")
 
 client.run(os.environ.get("TOKEN"))
