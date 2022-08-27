@@ -1,5 +1,5 @@
-import discord, os, dotenv, json, re
-from discord.ext import commands
+import nextcord, os, dotenv, json, re
+from nextcord.ext import commands
 from datetime import date, timedelta
 
 __author__ = "QuentiumYT"
@@ -9,13 +9,12 @@ with open("config.json", "r", encoding="utf-8", errors="ignore") as file:
 
 dotenv.load_dotenv()
 
-intents = discord.Intents.all()
+intents = nextcord.Intents.all()
 
 client = commands.Bot(
     command_prefix="-",
     description="Rando Bot",
     owner_id=246943045105221633,
-    pm_help=True,
     help_command=None,
     case_insensitive=True,
     max_messages=999999,
@@ -23,22 +22,22 @@ client = commands.Bot(
 )
 
 def emo(text):
-    return str(discord.utils.get(client.emojis, name=text))
+    return str(nextcord.utils.get(client.emojis, name=text))
 
 @client.event
 async def on_ready():
     print("Logged in as %s#%s" % (client.user.name, client.user.discriminator))
 
     await client.change_presence(
-        status=discord.Status.online,
-        activity=discord.Activity(
+        status=nextcord.Status.online,
+        activity=nextcord.Activity(
             name="Prépare une rando...",
-            type=discord.ActivityType.playing
+            type=nextcord.ActivityType.playing
         )
     )
 
 @client.listen()
-async def on_message(message: discord.Message):
+async def on_message(message: nextcord.Message):
     # Correct channel and mention everyone or role
     if message.channel.id == config["channel_announcements"] and (message.mention_everyone or message.role_mentions):
         if "date" in message.content.lower() or "heure" in message.content.lower():
@@ -51,7 +50,7 @@ async def on_message(message: discord.Message):
 
             planned_date = re.findall(r"(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](20\d{2})", message.content)
 
-            category = discord.utils.get(message.guild.categories, name=config["category_default"])
+            category = nextcord.utils.get(message.guild.categories, name=config["category_default"])
 
             if planned_date:
                 # Specified date
@@ -72,9 +71,9 @@ async def on_message(message: discord.Message):
             channel = await message.guild.create_text_channel("rando-" + date_repr, category=category)
 
             overwrites = {
-                message.guild.default_role: discord.PermissionOverwrite(view_channel=True, send_messages=False),
-                message.author: discord.PermissionOverwrite(view_channel=True, send_messages=True, mention_everyone=True),
-                discord.utils.get(message.author.guild.roles, name=config["role_next_rando"]): discord.PermissionOverwrite(view_channel=True, send_messages=True),
+                message.guild.default_role: nextcord.PermissionOverwrite(view_channel=True, send_messages=False),
+                message.author: nextcord.PermissionOverwrite(view_channel=True, send_messages=True, mention_everyone=True),
+                nextcord.utils.get(message.author.guild.roles, name=config["role_next_rando"]): nextcord.PermissionOverwrite(view_channel=True, send_messages=True),
             }
 
             for target, overwrite in overwrites.items():
@@ -87,22 +86,22 @@ async def on_message(message: discord.Message):
 async def on_raw_reaction_add(ctx):
     if not ctx.member.bot:
         if any(ctx.emoji.name == x for x in ["Check", "Average"]):
-            role = discord.utils.get(ctx.member.guild.roles, name=config["role_next_rando"])
+            role = nextcord.utils.get(ctx.member.guild.roles, name=config["role_next_rando"])
             try:
                 await ctx.member.add_roles(role)
-            except discord.errors.Forbidden:
+            except nextcord.errors.Forbidden:
                 pass
 
 @client.event
 async def on_raw_reaction_remove(ctx):
-    guild = discord.utils.get(client.guilds, id=ctx.guild_id)
-    user = discord.utils.get(guild.members, id=ctx.user_id)
+    guild = nextcord.utils.get(client.guilds, id=ctx.guild_id)
+    user = nextcord.utils.get(guild.members, id=ctx.user_id)
     if not user.bot:
         if any(ctx.emoji.name == x for x in ["Check", "Average", "Cross"]):
-            role = discord.utils.get(guild.roles, name=config["role_next_rando"])
+            role = nextcord.utils.get(guild.roles, name=config["role_next_rando"])
             try:
                 await user.remove_roles(role)
-            except discord.errors.Forbidden:
+            except nextcord.errors.Forbidden:
                 pass
 
 @client.command(
@@ -120,7 +119,7 @@ async def archive_cmd(ctx):
             for attachment in log.attachments:
                 await attachment.save("images" + os.sep + date + os.sep + attachment.filename)
 
-    category = discord.utils.get(ctx.guild.categories, name=config["category_archived"])
+    category = nextcord.utils.get(ctx.guild.categories, name=config["category_archived"])
     if not category:
         category = await ctx.guild.create_category_channel(config["category_archived"])
 
@@ -129,7 +128,7 @@ async def archive_cmd(ctx):
     participants = [x for x in ctx.guild.members if config["role_next_rando"] in [role.name for role in x.roles]]
 
     for participant in participants:
-        role = discord.utils.get(participant.guild.roles, name=config["role_next_rando"])
+        role = nextcord.utils.get(participant.guild.roles, name=config["role_next_rando"])
         await participant.remove_roles(role)
 
 @client.command(
@@ -142,7 +141,7 @@ async def participant_cmd(ctx):
 
     participants = [x for x in ctx.guild.members if config["role_next_rando"] in [role.name for role in x.roles]]
 
-    embed = discord.Embed(color=0x14F5F5)
+    embed = nextcord.Embed(color=0x14F5F5)
     embed.title = "Liste des participants"
     if participants:
         embed.description = "- " + "\n- ".join([member.name for member in participants])

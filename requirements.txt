@@ -1,2 +1,2 @@
-discord.py~=1.7
+nextcord~=2.1
 python-dotenv~=0.20
