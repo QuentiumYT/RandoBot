@@ -15,9 +15,9 @@ class ManageCogs(commands.Cog):
         if extension:
             try:
                 self.bot.load_extension("cogs." + extension)
-                return await ctx.send(f"`{extension}` successfully loaded.")
+                return await ctx.send(f"`{extension}` successfully loaded.", ephemeral=True)
             except Exception as e:
-                return await ctx.send(f"```py\n{type(e).__name__}: {e}\n```")
+                return await ctx.send(f"```py\n{type(e).__name__}: {e}\n```", ephemeral=True)
 
     @nextcord.slash_command(
         name="unload",
@@ -29,9 +29,9 @@ class ManageCogs(commands.Cog):
         if extension:
             try:
                 self.bot.unload_extension("cogs." + extension)
-                return await ctx.send(f"`{extension}` successfully unloaded.")
+                return await ctx.send(f"`{extension}` successfully unloaded.", ephemeral=True)
             except Exception as e:
-                return await ctx.send(f"```py\n{type(e).__name__}: {e}\n```")
+                return await ctx.send(f"```py\n{type(e).__name__}: {e}\n```", ephemeral=True)
 
     @nextcord.slash_command(
         name="reload",
@@ -44,9 +44,9 @@ class ManageCogs(commands.Cog):
             try:
                 self.bot.unload_extension("cogs." + extension)
                 self.bot.load_extension("cogs." + extension)
-                return await ctx.send(f"`{extension}` successfully reloaded.")
+                return await ctx.send(f"`{extension}` successfully reloaded.", ephemeral=True)
             except Exception as e:
-                return await ctx.send(f"```py\n{type(e).__name__}: {e}\n```")
+                return await ctx.send(f"```py\n{type(e).__name__}: {e}\n```", ephemeral=True)
 
 def setup(bot):
     bot.add_cog(ManageCogs(bot))
