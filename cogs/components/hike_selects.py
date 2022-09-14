@@ -19,7 +19,7 @@ class SelectDifficulty(nextcord.ui.Select):
     async def callback(self, interaction: nextcord.Interaction):
         embed = interaction.message.embeds[0]
 
-        embed.description += f"\n**Difficulté:** {' / '.join([x for x in self.values])}"
+        embed.description += f"\n**Difficulté:** {' / '.join(list(self.values))}"
 
         await interaction.message.edit(embed=embed, view=SelectSeatsView())
 

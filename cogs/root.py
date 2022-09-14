@@ -114,17 +114,19 @@ class ExecCode(nextcord.ui.Modal):
         if len(str(output)) > 1024:
             with open("output.txt", "w") as file:
                 file.write(repr(output))
+
             file = nextcord.File("output.txt")
             embed.add_field(
                 name="Résultat :",
                 value="Le résultat est trop long, il est donc disponible dans le fichier ci-dessous.",
             )
             await interaction.response.send_message(file=file, embed=embed, ephemeral=True)
+
             os.remove("output.txt")
         else:
             try:
                 output = output.decode("utf-8")
-            except:
+            except UnicodeDecodeError:
                 output = output.decode("iso-8859-1")
 
             embed.add_field(name="Instruction entrée", value=f"```bash\n{command}\n```", inline=False)

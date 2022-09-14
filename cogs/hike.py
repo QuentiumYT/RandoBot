@@ -7,7 +7,7 @@ from cogs.utils import config
 from cogs.components.hike_selects import SelectDifficultyView
 
 class HikeInfo(nextcord.ui.Modal):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         super().__init__(
             "Organiser une rando",
             timeout=5 * 60,
@@ -61,9 +61,7 @@ class HikeInfo(nextcord.ui.Modal):
         self.add_item(self.duration)
 
     async def callback(self, interaction: nextcord.Interaction):
-        planned_date = re.findall(r"(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](20\d{2})", self.date.value)
-
-        if planned_date:
+        if planned_date := re.findall(r"(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](20\d{2})", self.date.value):
             # Specified date
             date_obj = date(int(planned_date[0][2]), int(planned_date[0][1]), int(planned_date[0][0]))
         elif "demain" in self.date.value.lower():
@@ -100,7 +98,7 @@ class HikeInfo(nextcord.ui.Modal):
             ),
             color=nextcord.Color.green(),
         )
-        embed.set_footer(text="Rando organisée par {}".format(interaction.user.display_name), icon_url=interaction.user.avatar.url)
+        embed.set_footer(text=f"Rando organisée par {interaction.user.display_name}", icon_url=interaction.user.avatar.url)
 
         rando_msg = await interaction.response.send_message(embed=embed, view=SelectDifficultyView())
 
