@@ -1,6 +1,6 @@
 {
-    "//channel_announcements": "ID du salon ou les organisations doivent être créées",
-    "channel_announcements": 927920879747334224,
+    "//channel_announcements": "Nom du salon ou les organisations doivent être créées",
+    "channel_announcements": "annonces",
     "//role_next_rando": "Nom du rôle existant à attribuer pour la prochaine rando",
     "role_next_rando": "Prochaine Rando",
     "//category_default": "Nom de la catégorie ou les salons de rando seront crées",
