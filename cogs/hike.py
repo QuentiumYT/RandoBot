@@ -1,8 +1,7 @@
-import nextcord, re
+import nextcord
 from nextcord.ext import commands
-from datetime import date, timedelta
 
-from cogs.utils import config
+from cogs.utils import config, find_date
 
 from cogs.components.hike_selects import SelectDifficultyView
 
@@ -49,7 +48,6 @@ class HikeInfo(nextcord.ui.Modal):
             default_value="10h00",
             required=True,
             min_length=4,
-            max_length=10,
         )
         self.add_item(self.time)
 
@@ -61,24 +59,10 @@ class HikeInfo(nextcord.ui.Modal):
         self.add_item(self.duration)
 
     async def callback(self, interaction: nextcord.Interaction):
-        if planned_date := re.findall(r"(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](20\d{2})", self.date.value):
-            # Specified date
-            date_obj = date(int(planned_date[0][2]), int(planned_date[0][1]), int(planned_date[0][0]))
-        elif "demain" in self.date.value.lower():
-            # Tomorrow date
-            date_obj = date.today() + timedelta(days=1)
-        elif "samedi" in self.date.value.lower():
-            # Upcoming saturday date
-            delta = timedelta(days=5 - date.today().weekday())
-            date_obj = date.today() + delta if delta.days > 1 else date.today() + delta + timedelta(days=7)
-        elif "dimanche" in self.date.value.lower():
-            # Upcoming sunday date
-            delta = timedelta(days=6 - date.today().weekday())
-            date_obj = date.today() + delta if delta.days > 1 else date.today() + delta + timedelta(days=7)
+        if date_obj := find_date(self.date.value.lower()):
+            date_repr = date_obj.strftime("%d/%m/%Y")
         else:
             return await interaction.send("La date est invalide, merci de spécifier une date valide.", delete_after=20)
-
-        date_repr = date_obj.strftime("%d-%m-%Y")
 
         # Sent embed with all infos
         embed = nextcord.Embed(

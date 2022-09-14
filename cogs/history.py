@@ -1,7 +1,7 @@
 import nextcord, re
 from nextcord.ext import commands
 
-from cogs.utils import config
+from cogs.utils import config, find_date
 
 class HistoryCommand(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -29,8 +29,11 @@ class HistoryCommand(commands.Cog):
                 else:
                     continue
 
+                date = find_date(hike.content.lower() or hike.embeds[0].description.lower())
+
                 history[hike.id] = {
                     "name": name[0] if name else "Lieu non défini",
+                    "date": date.strftime("%d/%m/%Y") if date else "Date non définie",
                     "participants": hike.reactions[0].count - 1,
                 }
 
@@ -41,7 +44,7 @@ class HistoryCommand(commands.Cog):
         embed = nextcord.Embed(color=0x14F5F5)
         embed.title = "Liste des randos organisées"
         if history:
-            embed.description = "- " + "\n- ".join([f"{x['name']} ({x['participants']} participants)" for x in history.values()])
+            embed.description = "- " + "\n- ".join([f"{x['name']} {x['date']} ({x['participants']} participant(s))" for x in history.values()])
         else:
             embed.description = "Aucun historique pour le moment"
         embed.set_footer(text="By RandoBot")
