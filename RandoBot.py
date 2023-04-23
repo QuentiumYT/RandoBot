@@ -5,16 +5,17 @@ from cogwatch import watch
 from cogs.utils import config, cogs
 
 __author__ = "QuentiumYT"
-__version__ = "2.0.0"
+__version__ = "2.1.0"
 
 
 
 class RandoBot(commands.Bot):
     def __init__(self):
         intents = nextcord.Intents.all()
+        intents.message_content = False
+        intents.presences = False
 
         super().__init__(
-            command_prefix="-",
             description="Rando Bot",
             owner_id=246943045105221633,
             help_command=None,
@@ -37,7 +38,7 @@ class RandoBot(commands.Bot):
 
     async def on_raw_reaction_add(self, ctx):
         if not ctx.member.bot and any(ctx.emoji.name == x for x in ["Check", "Average"]):
-            role = nextcord.utils.get(ctx.member.guild.roles, name=config["role_next_rando"])
+            role = nextcord.utils.get(ctx.member.guild.roles, name=config.get(ctx.guild_id, "role_next_rando"))
             try:
                 await ctx.member.add_roles(role)
             except nextcord.errors.Forbidden:
@@ -47,7 +48,7 @@ class RandoBot(commands.Bot):
         guild = nextcord.utils.get(self.guilds, id=ctx.guild_id)
         user = nextcord.utils.get(guild.members, id=ctx.user_id)
         if not user.bot and any(ctx.emoji.name == x for x in ["Check", "Average", "Cross"]):
-            role = nextcord.utils.get(guild.roles, name=config["role_next_rando"])
+            role = nextcord.utils.get(guild.roles, name=config.get(ctx.guild_id, "role_next_rando"))
             try:
                 await user.remove_roles(role)
             except nextcord.errors.Forbidden:

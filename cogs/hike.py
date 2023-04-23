@@ -6,13 +6,14 @@ from cogs.utils import config, find_date
 from cogs.components.hike_selects import SelectDifficultyView
 
 class HikeInfo(nextcord.ui.Modal):
-    def __init__(self, bot: commands.Bot):
+    def __init__(self, bot: commands.Bot, ctx: nextcord.Interaction):
         super().__init__(
             "Organiser une rando",
             timeout=5 * 60,
         )
 
         self.bot = bot
+        self.ctx = ctx
 
         self.description = nextcord.ui.TextInput(
             label="Description / motivation de la rando",
@@ -94,7 +95,7 @@ class HikeInfo(nextcord.ui.Modal):
         await rando_msg.add_reaction(nextcord.utils.get(self.bot.emojis, name="Cross"))
 
         # Create a new channel with the date of the hike
-        category = nextcord.utils.get(rando_msg.guild.categories, name=config["category_default"])
+        category = nextcord.utils.get(rando_msg.guild.categories, name=config.get(self.ctx.guild_id, "category_default"))
 
         channel = await rando_msg.guild.create_text_channel("rando-" + date_repr, category=category)
 
@@ -102,7 +103,7 @@ class HikeInfo(nextcord.ui.Modal):
         overwrites = {
             rando_msg.guild.default_role: nextcord.PermissionOverwrite(view_channel=True, send_messages=True),
             interaction.user: nextcord.PermissionOverwrite(view_channel=True, send_messages=True, mention_everyone=True),
-            nextcord.utils.get(interaction.user.guild.roles, name=config["role_next_rando"]): nextcord.PermissionOverwrite(view_channel=True, send_messages=True),
+            nextcord.utils.get(interaction.user.guild.roles, name=config.get(self.ctx.guild_id, "role_next_rando")): nextcord.PermissionOverwrite(view_channel=True, send_messages=True),
         }
 
         for target, overwrite in overwrites.items():
@@ -119,7 +120,7 @@ class HikeCommand(commands.Cog):
         description="Organiser une rando",
     )
     async def rando_cmd(self, ctx: nextcord.Interaction):
-        info_modal = HikeInfo(self.bot)
+        info_modal = HikeInfo(self.bot, self.ctx)
         await ctx.response.send_modal(info_modal)
 
 def setup(bot):

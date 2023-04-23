@@ -7,9 +7,43 @@ dotenv.load_dotenv()
 # Get all cogs
 cogs = [c.replace(".py", "") for c in os.listdir("cogs") if os.path.isfile(os.path.join("cogs", c))]
 
-# Load config
-with open("config.json", "r", encoding="utf-8", errors="ignore") as file:
-    config = json.loads(file.read(), strict=False)
+# Handle config
+class Config:
+    def __init__(self, file: str = "config.json"):
+        self.file = file
+        self.load()
+
+    def __getitem__(self, key):
+        return self.config.get(key)
+
+    def __setitem__(self, key, value):
+        self.config[key] = value
+
+    def load(self):
+        if os.path.isfile("data/" + self.file):
+            with open("data/" + self.file, "r", encoding="utf-8", errors="ignore") as file:
+                self.config = json.loads(file.read())
+        else:
+            self.config = {}
+
+        return self.config
+
+    def save(self):
+        with open("data/" + self.file, "w", encoding="utf-8", errors="ignore") as file:
+            file.write(json.dumps(self.config, indent=4, ensure_ascii=False))
+
+    def update(self, data: dict, guild: int):
+        # Merge both dicts
+        self.config[str(guild)] = data | self.config.get(str(guild), {})
+        self.save()
+
+    def get(self, guild: int, value: str):
+        guild_data = self.config.get(str(guild))
+        return guild_data.get(value)
+
+config = Config()
+
+
 
 def find_date(text_date: str) -> date:
     if planned_date := re.findall(r"(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.]((20)?\d{2})", text_date):

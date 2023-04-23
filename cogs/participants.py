@@ -13,7 +13,7 @@ class ParticipantsCommand(commands.Cog):
     )
     async def participants_cmd(self, ctx: nextcord.Interaction):
         # Get all participants having the next hike role
-        participants = [x for x in ctx.guild.members if config["role_next_rando"] in [role.name for role in x.roles]]
+        participants = [x for x in ctx.guild.members if config.get(ctx.guild_id, "role_next_rando") in [role.name for role in x.roles]]
 
         # Send embed message with the list
         embed = nextcord.Embed(color=0x14F5F5)
