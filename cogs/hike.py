@@ -117,7 +117,6 @@ class HikeCommand(commands.Cog):
     @nextcord.slash_command(
         name="rando",
         description="Organiser une rando",
-        guild_ids=[380373195473027074, 950693381686837248],
     )
     async def rando_cmd(self, ctx: nextcord.Interaction):
         info_modal = HikeInfo(self.bot)

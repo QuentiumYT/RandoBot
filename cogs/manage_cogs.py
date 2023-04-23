@@ -8,7 +8,7 @@ class ManageCogs(commands.Cog):
     @nextcord.slash_command(
         name="load",
         description="Load a cog into the bot",
-        guild_ids=[380373195473027074, 950693381686837248],
+        guild_ids=[380373195473027074],
     )
     @commands.is_owner()
     async def load(self, ctx: nextcord.Interaction, extension: str = None):
@@ -22,7 +22,7 @@ class ManageCogs(commands.Cog):
     @nextcord.slash_command(
         name="unload",
         description="Unload a cog from the bot",
-        guild_ids=[380373195473027074, 950693381686837248],
+        guild_ids=[380373195473027074],
     )
     @commands.is_owner()
     async def unload(self, ctx: nextcord.Interaction, extension: str = None):
@@ -36,7 +36,7 @@ class ManageCogs(commands.Cog):
     @nextcord.slash_command(
         name="reload",
         description="Reload a cog into the bot",
-        guild_ids=[380373195473027074, 950693381686837248],
+        guild_ids=[380373195473027074],
     )
     @commands.is_owner()
     async def reload(self, ctx: nextcord.Interaction, extension: str = None):

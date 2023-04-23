@@ -10,7 +10,6 @@ class HistoryCommand(commands.Cog):
     @nextcord.slash_command(
         name="history",
         description="Affiche l'historique des randonnées",
-        guild_ids=[380373195473027074, 950693381686837248],
     )
     async def history_cmd(self, ctx: nextcord.Interaction):
         # Get all hikes from announcement channel

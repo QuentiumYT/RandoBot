@@ -10,7 +10,6 @@ class ArchiveCommand(commands.Cog):
     @nextcord.slash_command(
         name="archive",
         description="Archive un salon de rando",
-        guild_ids=[380373195473027074, 950693381686837248],
     )
     async def archive_cmd(self, ctx: nextcord.Interaction):
         # Create local folder to store pictures in the channel

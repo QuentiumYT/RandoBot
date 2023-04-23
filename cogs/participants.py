@@ -10,7 +10,6 @@ class ParticipantsCommand(commands.Cog):
     @nextcord.slash_command(
         name="participants",
         description="Affiche les participants à la prochaine rando",
-        guild_ids=[380373195473027074, 950693381686837248],
     )
     async def participants_cmd(self, ctx: nextcord.Interaction):
         # Get all participants having the next hike role
