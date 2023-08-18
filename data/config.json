@@ -1,12 +1,22 @@
 {
     "380373195473027074": {
-        "_announcement_channel": "info",
-        "announcement_channel": 412711098551107596,
-        "_role_next_rando": "💻 QB Developer 💻",
-        "role_next_rando": 380373804158812161,
-        "_hike_category": "Text channels",
-        "hike_category": 412709725113679875,
-        "_archived_hikes_category": "Text channels",
-        "archived_hikes_category": 412709725113679875
+        "_announcement_channel": "test-bot",
+        "announcement_channel": 927920879747334224,
+        "_role_next_rando": "Next hike",
+        "role_next_rando": 1142096644888866846,
+        "_hike_category": "Bot testing",
+        "hike_category": 790607769174278144,
+        "_archived_hikes_category": "others",
+        "archived_hikes_category": 790608753049337906
+    },
+    "950693381686837248": {
+        "_announcement_channel": "randos",
+        "announcement_channel": 950693643688230922,
+        "_role_next_rando": "Prochaine Rando",
+        "role_next_rando": 952270082032169010,
+        "_hike_category": "Discussion",
+        "hike_category": 950693381686837249,
+        "_archived_hikes_category": "Rando archivées",
+        "archived_hikes_category": 953383239907692585
     }
 }
