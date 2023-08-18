@@ -54,14 +54,15 @@ class HikeInfo(nextcord.ui.Modal):
 
         self.duration = nextcord.ui.TextInput(
             label="Durée",
-            placeholder="5h | 10h | 20h (déter!)",
+            placeholder="4h (aprem) | 8h (journée) | 2j (déter!)",
             required=False,
         )
         self.add_item(self.duration)
 
     async def callback(self, interaction: nextcord.Interaction):
         if date_obj := find_date(self.date.value.lower()):
-            date_repr = date_obj.strftime("%d/%m/%Y")
+            self.date.clean = date_obj.strftime("%d/%m/%Y")
+            self.date.channel = date_obj.strftime("%d-%m-%Y")
         else:
             return await interaction.send("La date est invalide, merci de spécifier une date valide.", delete_after=20)
 
@@ -71,7 +72,7 @@ class HikeInfo(nextcord.ui.Modal):
             description=f"""
             @everyone {self.description.value}
             **Lieu**: {self.place.value}
-            **Date**: {date_repr}
+            **Date**: {self.date.clean}
             **Heure**: {self.time.value}
             **Durée**: {self.duration.value or 'Non précisée'}
             """,
@@ -91,7 +92,7 @@ class HikeInfo(nextcord.ui.Modal):
         # Create a new channel with the date of the hike
         category = nextcord.utils.get(rando_msg.guild.categories, id=config.get(self.ctx.guild_id, "category_default"))
 
-        channel = await rando_msg.guild.create_text_channel("rando-" + date_repr, category=category)
+        channel = await rando_msg.guild.create_text_channel("rando-" + self.date.channel, category=category)
 
         # Permissions for users in the new channel
         overwrites = {
