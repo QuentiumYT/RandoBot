@@ -31,7 +31,7 @@ class ConfigCommand(commands.Cog):
                 "archived_hikes_category": archived_hikes_category.id,
             }
 
-            config.update(data, ctx.guild_id)
+            config.update(ctx.guild_id, data)
 
             await ctx.send("Configuration mise à jour !", delete_after=5)
 

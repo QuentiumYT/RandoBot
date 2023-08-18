@@ -1,8 +1,11 @@
-import nextcord, os, asyncio
+import asyncio
+import os
+
+import nextcord
 from nextcord.ext import commands
 from cogwatch import watch
 
-from cogs.utils import config, cogs
+from cogs.utils import cogs, config
 
 __author__ = "QuentiumYT"
 __version__ = "2.1.0"

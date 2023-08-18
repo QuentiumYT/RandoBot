@@ -32,13 +32,13 @@ class Config:
         with open("data/" + self.file, "w", encoding="utf-8", errors="ignore") as file:
             file.write(json.dumps(self.config, indent=4, ensure_ascii=False))
 
-    def update(self, data: dict, guild: int):
+    def update(self, guild_id: int, data: dict):
         # Merge both dicts
-        self.config[str(guild)] = data | self.config.get(str(guild), {})
+        self.config[str(guild_id)] = data
         self.save()
 
-    def get(self, guild: int, value: str):
-        guild_data = self.config.get(str(guild))
+    def get(self, guild_id: int, value: str):
+        guild_data = self.config.get(str(guild_id))
         return guild_data.get(value)
 
 config = Config()
@@ -58,11 +58,11 @@ def find_date(text_date: str) -> date:
         # Tomorrow date
         return date.today() + timedelta(days=1)
     elif "samedi" in text_date:
-        # Upcoming saturday date
+        # Upcoming Saturday date
         delta = timedelta(days=5 - date.today().weekday())
         return date.today() + delta if delta.days > 1 else date.today() + delta + timedelta(days=7)
     elif "dimanche" in text_date:
-        # Upcoming sunday date
+        # Upcoming Sunday date
         delta = timedelta(days=6 - date.today().weekday())
         return date.today() + delta if delta.days > 1 else date.today() + delta + timedelta(days=7)
     return None

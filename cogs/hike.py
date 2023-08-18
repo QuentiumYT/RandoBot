@@ -68,19 +68,13 @@ class HikeInfo(nextcord.ui.Modal):
         # Sent embed with all infos
         embed = nextcord.Embed(
             title="Sondage prochaine randonnée",
-            description="""
-            @everyone {}
-            **Lieu**: {}
-            **Date**: {}
-            **Heure**: {}
-            **Durée**: {}
-            """.format(
-                self.description.value,
-                self.place.value,
-                date_repr,
-                self.time.value,
-                self.duration.value or "Non précisée",
-            ),
+            description=f"""
+            @everyone {self.description.value}
+            **Lieu**: {self.place.value}
+            **Date**: {date_repr}
+            **Heure**: {self.time.value}
+            **Durée**: {self.duration.value or 'Non précisée'}
+            """,
             color=nextcord.Color.green(),
         )
         embed.set_footer(text=f"Rando organisée par {interaction.user.display_name}", icon_url=interaction.user.avatar.url)
