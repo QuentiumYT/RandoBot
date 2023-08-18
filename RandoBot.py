@@ -15,7 +15,7 @@ __version__ = "2.1.0"
 class RandoBot(commands.Bot):
     def __init__(self):
         intents = nextcord.Intents.all()
-        intents.message_content = False
+        intents.message_content = True
         intents.presences = False
 
         super().__init__(
