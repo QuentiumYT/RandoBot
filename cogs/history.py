@@ -13,7 +13,7 @@ class HistoryCommand(commands.Cog):
     )
     async def history_cmd(self, ctx: nextcord.Interaction):
         # Get all hikes from announcement channel
-        announcement_channel = nextcord.utils.get(ctx.guild.channels, name=config.get(ctx.guild_id, "channel_announcements"))
+        announcement_channel = nextcord.utils.get(ctx.guild.channels, id=config.get(ctx.guild_id, "announcement_channel"))
 
         if not announcement_channel:
             return await ctx.send("Le salon d'annonces n'existe pas !")

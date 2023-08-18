@@ -23,7 +23,7 @@ class ArchiveCommand(commands.Cog):
                     await attachment.save("images" + os.sep + date + os.sep + attachment.filename)
 
         # Get archived category and create it if it doesn't exist
-        category = nextcord.utils.get(ctx.guild.categories, name=config.get(ctx.guild_id, "category_archived"))
+        category = nextcord.utils.get(ctx.guild.categories, id=config.get(ctx.guild_id, "category_archived"))
         if not category:
             category = await ctx.guild.create_category_channel(config.get(ctx.guild_id, "category_archived"))
 
@@ -34,7 +34,7 @@ class ArchiveCommand(commands.Cog):
         participants = [x for x in ctx.guild.members if config.get(ctx.guild_id, "role_next_rando") in [role.name for role in x.roles]]
 
         for participant in participants:
-            role = nextcord.utils.get(participant.guild.roles, name=config.get(ctx.guild_id, "role_next_rando"))
+            role = nextcord.utils.get(participant.guild.roles, id=config.get(ctx.guild_id, "role_next_rando"))
             await participant.remove_roles(role)
 
         await ctx.send("Salon rando archivé", delete_after=60)

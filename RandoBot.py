@@ -38,7 +38,7 @@ class RandoBot(commands.Bot):
 
     async def on_raw_reaction_add(self, ctx):
         if not ctx.member.bot and any(ctx.emoji.name == x for x in ["Check", "Average"]):
-            role = nextcord.utils.get(ctx.member.guild.roles, name=config.get(ctx.guild_id, "role_next_rando"))
+            role = nextcord.utils.get(ctx.member.guild.roles, id=config.get(ctx.guild_id, "role_next_rando"))
             try:
                 await ctx.member.add_roles(role)
             except nextcord.errors.Forbidden:
@@ -48,7 +48,7 @@ class RandoBot(commands.Bot):
         guild = nextcord.utils.get(self.guilds, id=ctx.guild_id)
         user = nextcord.utils.get(guild.members, id=ctx.user_id)
         if not user.bot and any(ctx.emoji.name == x for x in ["Check", "Average", "Cross"]):
-            role = nextcord.utils.get(guild.roles, name=config.get(ctx.guild_id, "role_next_rando"))
+            role = nextcord.utils.get(guild.roles, id=config.get(ctx.guild_id, "role_next_rando"))
             try:
                 await user.remove_roles(role)
             except nextcord.errors.Forbidden:

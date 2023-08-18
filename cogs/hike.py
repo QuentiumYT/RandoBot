@@ -95,7 +95,7 @@ class HikeInfo(nextcord.ui.Modal):
         await rando_msg.add_reaction(nextcord.utils.get(self.bot.emojis, name="Cross"))
 
         # Create a new channel with the date of the hike
-        category = nextcord.utils.get(rando_msg.guild.categories, name=config.get(self.ctx.guild_id, "category_default"))
+        category = nextcord.utils.get(rando_msg.guild.categories, id=config.get(self.ctx.guild_id, "category_default"))
 
         channel = await rando_msg.guild.create_text_channel("rando-" + date_repr, category=category)
 
@@ -103,7 +103,7 @@ class HikeInfo(nextcord.ui.Modal):
         overwrites = {
             rando_msg.guild.default_role: nextcord.PermissionOverwrite(view_channel=True, send_messages=True),
             interaction.user: nextcord.PermissionOverwrite(view_channel=True, send_messages=True, mention_everyone=True),
-            nextcord.utils.get(interaction.user.guild.roles, name=config.get(self.ctx.guild_id, "role_next_rando")): nextcord.PermissionOverwrite(view_channel=True, send_messages=True),
+            nextcord.utils.get(interaction.user.guild.roles, id=config.get(self.ctx.guild_id, "role_next_rando")): nextcord.PermissionOverwrite(view_channel=True, send_messages=True),
         }
 
         for target, overwrite in overwrites.items():
