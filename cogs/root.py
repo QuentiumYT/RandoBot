@@ -27,7 +27,7 @@ class EvalCode(nextcord.ui.Modal):
         if "print(" in code:
             code = "".join(code.replace("print(", "").rsplit(")", 1))
         elif "say(" in code:
-            code = "".join(code.replace("say(", "").rsplit(")", 1))
+            code = code.replace("say(", "interaction.response.send_message(")
 
         try:
             # Evaluates the args
@@ -35,6 +35,7 @@ class EvalCode(nextcord.ui.Modal):
             # Await the command
             if inspect.isawaitable(res):
                 await res
+                output = None
                 awaited = True
             # Send the simple message
             else:
@@ -43,7 +44,10 @@ class EvalCode(nextcord.ui.Modal):
         except Exception as e:
             return await interaction.response.send_message(f'```py\n{e.__class__.__name__}: {e}\n```', ephemeral=True)
 
-        if output is None:
+        if "say(" in code:
+            return
+
+        if not output:
             output = "Code exécuté !"
 
         elif os.environ.get("TOKEN") in str(output):
@@ -55,7 +59,7 @@ class EvalCode(nextcord.ui.Modal):
         )
 
         if len(str(output)) > 1024:
-            with open("output.txt", "w") as file:
+            with open("output.txt", "w", encoding="utf-8") as file:
                 file.write(repr(output))
             file = nextcord.File("output.txt")
             embed.add_field(
@@ -112,7 +116,7 @@ class ExecCode(nextcord.ui.Modal):
         )
 
         if len(str(output)) > 1024:
-            with open("output.txt", "w") as file:
+            with open("output.txt", "w", encoding="utf-8") as file:
                 file.write(repr(output))
 
             file = nextcord.File("output.txt")
