@@ -19,7 +19,7 @@ class SelectDifficulty(nextcord.ui.Select):
     async def callback(self, interaction: nextcord.Interaction):
         embed = interaction.message.embeds[0]
 
-        embed.description += f"\n**Difficulté:** {' / '.join(list(self.values))}"
+        embed.description += f"\n**Difficulté :** {' / '.join(list(self.values))}"
 
         await interaction.message.edit(embed=embed, view=SelectSeatsView())
 
@@ -51,7 +51,7 @@ class SelectSeats(nextcord.ui.Select):
     async def callback(self, interaction: nextcord.Interaction):
         embed = interaction.message.embeds[0]
 
-        embed.description += f"\n**Covoiturage:** {self.values[0]}"
+        embed.description += f"\n**Covoiturage :** {self.values[0]}"
 
         await interaction.message.edit(embed=embed, view=SelectCarShareView())
 
@@ -81,7 +81,7 @@ class SelectCarShare(nextcord.ui.Select):
     async def callback(self, interaction: nextcord.Interaction):
         embed = interaction.message.embeds[0]
 
-        embed.description += f"\n**Repas:** {self.values[0]}"
+        embed.description += f"\n**Repas :** {self.values[0]}"
 
         await interaction.message.edit(view=None, embed=embed)
 

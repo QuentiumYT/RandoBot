@@ -60,21 +60,21 @@ class HikeInfo(nextcord.ui.Modal):
         self.add_item(self.duration)
 
     async def callback(self, interaction: nextcord.Interaction):
-        if date_obj := find_date(self.date.value.lower()):
-            self.date.clean = date_obj.strftime("%d/%m/%Y")
-            self.date.channel = date_obj.strftime("%d-%m-%Y")
-        else:
+        if not (date_obj := find_date(self.date.value.lower())):
             return await interaction.send("La date est invalide, merci de spécifier une date valide.", delete_after=20)
+
+        self.date.clean = date_obj.strftime("%d/%m/%Y")
+        self.date.channel = date_obj.strftime("%d-%m-%Y")
 
         # Sent embed with all infos
         embed = nextcord.Embed(
             title="Sondage prochaine randonnée",
             description=f"""
             @everyone {self.description.value}
-            **Lieu**: {self.place.value}
-            **Date**: {self.date.clean}
-            **Heure**: {self.time.value}
-            **Durée**: {self.duration.value or 'Non précisée'}
+            **Lieu** : {self.place.value}
+            **Date** : {self.date.clean}
+            **Heure** : {self.time.value}
+            **Durée** : {self.duration.value or 'Non précisée'}
             """,
             color=nextcord.Color.green(),
         )
