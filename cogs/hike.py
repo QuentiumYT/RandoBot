@@ -114,7 +114,7 @@ class HikeCommand(commands.Cog):
         description="Organiser une rando",
     )
     async def rando_cmd(self, ctx: nextcord.Interaction):
-        info_modal = HikeInfo(self.bot, self.ctx)
+        info_modal = HikeInfo(self.bot, ctx)
         await ctx.response.send_modal(info_modal)
 
 def setup(bot):
