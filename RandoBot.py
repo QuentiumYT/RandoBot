@@ -8,7 +8,7 @@ from cogwatch import watch
 from cogs.utils import cogs, config
 
 __author__ = "QuentiumYT"
-__version__ = "2.2.0"
+__version__ = "2.2.1"
 
 
 

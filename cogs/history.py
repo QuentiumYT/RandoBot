@@ -10,6 +10,9 @@ class HistoryCommand(commands.Cog):
     @nextcord.slash_command(
         name="history",
         description="Affiche l'historique des randonnées",
+        name_localizations={
+            "fr": "historique",
+        }
     )
     async def history_cmd(self, ctx: nextcord.Interaction):
         # Get all hikes from announcement channel

@@ -111,10 +111,13 @@ class HikeCommand(commands.Cog):
         self.bot = bot
 
     @nextcord.slash_command(
-        name="rando",
+        name="hike",
         description="Organiser une rando",
+        name_localizations={
+            "fr": "rando",
+        }
     )
-    async def rando_cmd(self, ctx: nextcord.Interaction):
+    async def hike_cmd(self, ctx: nextcord.Interaction):
         info_modal = HikeInfo(self.bot, ctx)
         await ctx.response.send_modal(info_modal)
 

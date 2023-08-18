@@ -18,10 +18,12 @@ Every command or set of commands are located in the `cogs` folder. If you need a
 
 ## 🚀 Features
 
--   `/rando` ➤ Organize a hike by filling a form & selects
+-   `/hike` ➤ Organize a hike by filling a form & selects
 -   `/participants` ➤ Show a list of people that are sure and unsure about joining the hike
 -   `/archive` ➤ Move the hike channel in a category and save all pictures locally
--   Cogs manipulation commands `load`, `unload`, `reload` for admin only
+-   `/history` ➤ Display a list of all hikes that have been created
+-   Cogs manipulation commands `/load`, `/unload`, `/reload` for admin only
+-   Debug commands `/eval`, `/exec` for admin only
 
 ## 📚 Documentation
 
